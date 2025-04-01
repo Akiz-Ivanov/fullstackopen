@@ -1,6 +1,6 @@
 # Courseinfo (Part 1 - Full Stack Open)
 
-A React app for exercises **1.1-1.2** of the [Full Stack Open](https://fullstackopen.com) course.  
+A React app for exercises **1.1-1.5** of the [Full Stack Open](https://fullstackopen.com) course.  
 Displays course information dynamically using React components.
 
 ## Features
