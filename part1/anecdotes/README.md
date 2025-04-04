@@ -7,3 +7,9 @@ Displays and votes for software engineering anecdotes.
 - Displays random software engineering anecdotes
 - Tracks votes for each anecdote
 - Shows the anecdote with the most votes
+
+## Screenshots
+
+Preview of the app's functionality:
+
+![App Screenshot](/preview/screenshot.png)
