@@ -7,3 +7,9 @@ Collects and displays customer feedback statistics.
 - Tracks "good", "neutral", and "bad" feedback
 - Calculates total, average, and positive percentage
 - Demonstrates state management and derived values
+
+## Screenshots
+
+Preview of the app's functionality:
+
+![App Screenshot](/preview/screenshot.png)
