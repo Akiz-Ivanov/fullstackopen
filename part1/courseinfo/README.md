@@ -6,3 +6,9 @@ Displays course information dynamically using React components.
 ## Features
 - Renders a list of courses and their details.
 - Demonstrates props, component composition, and state management.
+
+## Screenshots
+
+Preview of the app's functionality:
+
+![App Screenshot](/preview/screenshot.png)
