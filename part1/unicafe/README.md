@@ -12,4 +12,4 @@ Collects and displays customer feedback statistics.
 
 Preview of the app's functionality:
 
-![App Screenshot](/preview/screenshot.png)
+![App Screenshot](./preview/screenshot.png)
