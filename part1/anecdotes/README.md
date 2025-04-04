@@ -12,4 +12,4 @@ Displays and votes for software engineering anecdotes.
 
 Preview of the app's functionality:
 
-![App Screenshot](/preview/screenshot.png)
+![App Screenshot](./preview/screenshot.png)
