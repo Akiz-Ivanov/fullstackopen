@@ -11,4 +11,4 @@ Displays course information dynamically using React components.
 
 Preview of the app's functionality:
 
-![App Screenshot](/preview/screenshot.png)
+![App Screenshot](./preview/screenshot.png)
