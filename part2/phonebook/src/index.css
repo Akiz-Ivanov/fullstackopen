@@ -105,7 +105,7 @@ main {
 .inner-line {
     position: absolute;
     top: 0;
-    left: 3rem;
+    left: 6.5rem;
     bottom: 0;
     width: 3px;
     min-height: 100vh;
@@ -122,8 +122,9 @@ form {
     margin-bottom: 1rem;
     border-bottom: 1px solid #d1c7b7;
     padding-bottom: 0.5rem;
-    padding-inline: 4rem;
+    padding-inline: 8rem;
 }
+
 
 h2 {
     padding-bottom: 1rem;
@@ -235,4 +236,17 @@ form input {
 .add-btn:active {
     transform: translateY(0);
     box-shadow: none;
+}
+
+@media (max-width: 650px) {
+    .inner-line {
+        left: 3rem;
+    }
+
+    h1,
+    li,
+    .filter,
+    form {
+        padding-inline: 5rem;
+    }
 }
