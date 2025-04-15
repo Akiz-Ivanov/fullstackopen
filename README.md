@@ -1,6 +1,6 @@
 # Full Stack Open
 
-Exercises and solutions for the [Full Stack Open](https://fullstackopen.com) course, built with React and modern web development tools.
+Exercises and solutions for the [Full Stack Open](https://fullstackopen.com) course.
 
 ---
 
