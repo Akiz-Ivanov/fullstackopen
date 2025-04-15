@@ -1,0 +1,238 @@
+/*==============================
+  CSS Reset
+===============================*/
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -moz-tab-size: 4;
+    tab-size: 4;
+    scroll-behavior: smooth;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+button {
+    all: unset;
+    cursor: pointer;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/*==============================
+  Custom styles
+===============================*/
+.notification {
+    background: #fef9f1;
+    font-size: 1.25rem;
+    font-family: 'Caveat', cursive;
+    border-left: 3px solid;
+    padding: 0.5rem 1rem;
+    max-width: 24rem;
+    margin-left: 4rem;
+    margin-bottom: 1rem;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #d1c7b7;
+}
+
+.success {
+    border-left-color: #228b22;
+    color: #2a5a2a;
+    background-color: #f1f9f1;
+}
+
+.error {
+    border-left-color: #b22222;
+    color: #5a2a2a;
+    background-color: #f9f1f1;
+}
+
+body {
+    background-color: #f4eccc;
+    font-family: 'Caveat', cursive;
+    background-color: #F0E6D2;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+main {
+    position: relative;
+    min-height: 100vh;
+}
+
+.wrapper {
+    width: 100%;
+    border: 1px solid #ddd;
+    text-align: left;
+    background: #F0E6D2;
+    border: 1px solid #d1c7b7;
+    border-radius: 2px;
+    padding-block: 1rem;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.inner-line {
+    position: absolute;
+    top: 0;
+    left: 3rem;
+    bottom: 0;
+    width: 3px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    background-color: #ff6b6b;
+    z-index: 1000;
+}
+
+h1,
+li,
+.filter,
+form {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #d1c7b7;
+    padding-bottom: 0.5rem;
+    padding-inline: 4rem;
+}
+
+h2 {
+    padding-bottom: 1rem;
+}
+
+form>input {
+    margin-bottom: 1rem;
+}
+
+form>div {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
+
+input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #333;
+    border-radius: 0;
+    padding: .25rem;
+    width: 200px;
+    outline: none;
+}
+
+input:focus {
+    border-bottom-color: #ff6b6b;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+input::placeholder {
+    color: #a09988;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+em {
+    color: #ff6b6b;
+    display: block;
+    margin-left: 4rem;
+    border-left: 2px solid #ff6b6b;
+    padding-left: .5rem;
+}
+
+form input {
+    margin-bottom: .5rem;
+}
+
+.person {
+    display: flex;
+    align-items: center;
+}
+
+.delete-btn {
+    order: 1;
+    margin-left: 1rem;
+}
+
+.name-number {
+    order: 0;
+}
+
+.delete-btn {
+    color: #be6c6c;
+    font-family: 'Caveat', cursive;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+    text-underline-offset: 1px;
+}
+
+.delete-btn:hover {
+    color: #8b0000;
+    text-decoration: underline;
+    text-decoration-style: solid;
+}
+
+.delete-btn:hover~.name-number {
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: rgb(34, 34, 34);
+}
+
+.add-btn {
+    border: 1.5px solid #333;
+    color: #333;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    padding: 0.3rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 1px 1px 0 #aaa;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-left: 1rem;
+    background-color: #fef9f1;
+    border-top-color: #d1c7b7;
+    border-left-color: #d1c7b7;
+    border-right-color: #a09988;
+    border-bottom-color: #a09988;
+}
+
+.add-btn:hover {
+    background-color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.add-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
