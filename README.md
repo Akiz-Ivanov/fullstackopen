@@ -22,4 +22,4 @@ Exercises and solutions for the [Full Stack Open](https://fullstackopen.com) cou
 
 ---
 
-Each project includes its own README and screenshot preview. Built with [Vite](https://vitejs.dev) for rapid frontend development.
+Each project includes its own README and screenshot preview.
