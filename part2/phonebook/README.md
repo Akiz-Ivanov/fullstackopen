@@ -14,4 +14,4 @@ Manages contacts with add, delete, filter, and update features.
 
 Preview of the app's functionality:
 
-![App Screenshot](/preview/screenshot.jpeg)
+![App Screenshot](./preview/screenshot.jpeg)
