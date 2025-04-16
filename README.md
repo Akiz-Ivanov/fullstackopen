@@ -1,8 +1,25 @@
-# Part 1: Introduction to React
+# Full Stack Open
 
-Exercises for [Full Stack Open - Part 1](https://fullstackopen.com/en/part1)
+Exercises and solutions for the [Full Stack Open](https://fullstackopen.com) course.
 
-## Key Exercises
-- **[courseinfo](./part1/courseinfo)**: 1.1 - 1.5  
-- **[unicafe](./part1/unicafe)**: 1.6 - 1.11  
-- **[anecdotes](./part1/anecdotes)**: 1.12 - 1.14
+---
+
+## 📘 Part 1: Introduction to React
+
+**Exercises:**  
+- [`courseinfo`](./part1/courseinfo) — _1.1 to 1.5_  
+- [`unicafe`](./part1/unicafe) — _1.6 to 1.11_  
+- [`anecdotes`](./part1/anecdotes) — _1.12 to 1.14_
+
+---
+
+## 📗 Part 2: Communicating with Server
+
+**Exercises:**  
+- [`courseinfo-advanced`](./part2/courseinfo-advanced) — _2.1 to 2.5_  
+- [`phonebook`](./part2/phonebook) — _2.6 to 2.17_  
+- [`countries`](./part2/countries) — _2.18 to 2.20_
+
+---
+
+Each project includes its own README and screenshot preview.
