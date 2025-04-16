@@ -7,6 +7,7 @@ import Search from './Search'
 
 function App() {
   const countryInfoRef = useRef(null);
+  const topRef = useRef(null);
 
   //State variables
   const [filter, setFilter] = useState('')
@@ -81,15 +82,13 @@ function App() {
       top: 0,
       behavior: 'smooth',
     })
+      topRef.current.focus();
   }
 
   //UI
   return (
     <>
-      <button className="back-to-top-btn" onClick={scrollToTop}>
-        <i className="fas fa-chevron-up"></i>
-      </button>
-      <main>
+      <main ref={topRef} tabIndex="-1">
         <h1>Explore Countries</h1>
         <Search
           handleSearch={handleSearch}
@@ -115,6 +114,9 @@ function App() {
           </div>
         )}
       </main>
+      <button className="back-to-top-btn" onClick={scrollToTop} aria-label="Back to top">
+        <i className="fas fa-chevron-up"></i>
+      </button>
     </>
   )
 }

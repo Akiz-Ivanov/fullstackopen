@@ -195,7 +195,7 @@ h1 {
     border: none;
     border-radius: 0.75rem;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
     display: inline-block;
     text-align: center;
     line-height: 1.2;
@@ -204,6 +204,15 @@ h1 {
 
 .show-btn:hover {
     background: #3d85f7;
+    outline: 3px solid orange;
+    outline-offset: 2px;
+}
+
+.show-btn:focus {
+    background: #3d85f7;
+    transform: scale(1.05);
+    outline: 3px solid orange;
+    outline-offset: 2px;
 }
 
 .country-warning {
@@ -238,7 +247,8 @@ h1 {
     margin-bottom: 2rem;
 }
 
-.country-info:focus {
+.country-info:focus,
+main:focus {
     box-shadow: 0 0.25rem 0.9375rem rgba(0, 102, 255, 0.3);
     outline: none;
 }
@@ -342,6 +352,19 @@ h1 {
     transform: scale(1.05);
 }
 
+.back-to-top-btn:focus-visible {
+    background: #3d85f7;
+    transform: scale(1.05);
+    outline: 3px solid orange;
+    outline-offset: 2px;
+}
+
+.back-to-top-btn:active {
+    outline: none;
+}
+
+
+
 @media (min-width: 48rem) {
 
     .country-info-details {
@@ -369,4 +392,3 @@ h1 {
         padding: 0;
     }
 }
-
