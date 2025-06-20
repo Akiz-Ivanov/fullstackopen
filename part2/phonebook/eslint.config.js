@@ -24,7 +24,7 @@ export default [
     },
     rules: {
       ...js.configs.recommended.rules,
-      ...react.configs['recommended'].rules,       // <-- Add this line
+      ...react.configs['recommended'].rules,
       ...reactHooks.configs.recommended.rules,
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': [
@@ -34,7 +34,7 @@ export default [
     },
     settings: {
       react: {
-        version: 'detect', // Automatically detect react version
+        version: 'detect',
       },
     },
   },
