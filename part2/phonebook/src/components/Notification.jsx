@@ -4,9 +4,9 @@ const Notification = ({ notification }) => {
     }
 
     return (
-        <secion className={`notification ${notification.type}`} role="alert">
+        <section className={`notification ${notification.type}`} role="alert">
             {notification.message}
-        </secion>
+        </section>
     )
 }
 
