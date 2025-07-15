@@ -25,7 +25,7 @@ Exercises and solutions for the [Full Stack Open](https://fullstackopen.com) cou
 Each project includes its own README and screenshot preview.
 
 
-## Part 3 – Node.js and Express Backend
+📙 ## Part 3 – Node.js and Express Backend
 
 The backend for the Phonebook app, built with Node.js, Express, and MongoDB (Mongoose), is located in a separate repository:  
 [phonebook-backend](https://github.com/Akiz-Ivanov/phonebook-backend)
