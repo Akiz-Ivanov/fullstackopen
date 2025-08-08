@@ -24,6 +24,7 @@ Exercises and solutions for the [Full Stack Open](https://fullstackopen.com) cou
 
 Each project includes its own README and screenshot preview.
 
+---
 
 ## 📙 Part 3 – Node.js and Express Backend
 
@@ -33,3 +34,12 @@ The backend for the Phonebook app, built with Node.js, Express, and MongoDB (Mon
 This part covers creating a REST API, connecting to a cloud database, deploying the backend, and serving the frontend production build.
 
 Live demo: https://phonebook-backend-j8qc.onrender.com
+
+---
+
+## 📕 Part 5 – Testing React Apps
+
+**Exercises:**  
+- [`bloglist-frontend`](./part5/bloglist-frontend) — _5.1 to 5.26_  
+- [`bloglist-backend`](./part5/bloglist-backend) — _5.14 to 5.16 (backend tests)_  
+- [`bloglist-e2e-testing`](./part5/bloglist-e2e-testing) — _End-to-end tests with Playwright_
