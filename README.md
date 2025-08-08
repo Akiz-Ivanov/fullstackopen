@@ -40,6 +40,6 @@ Live demo: https://phonebook-backend-j8qc.onrender.com
 ## 📕 Part 5 – Testing React Apps
 
 **Exercises:**  
-- [`bloglist-frontend`](./part5/bloglist-frontend) — _5.1 to 5.26_  
-- [`bloglist-backend`](./part5/bloglist-backend) — _5.14 to 5.16 (backend tests)_  
+- [`bloglist-frontend`](./part5/bloglist-frontend) — _5.1 to 5.26 (React component tests)_  
+- [`bloglist-backend`](./part5/bloglist-backend) — _Backend code from earlier parts, no new backend tests here_  
 - [`bloglist-e2e-testing`](./part5/bloglist-e2e-testing) — _End-to-end tests with Playwright_
