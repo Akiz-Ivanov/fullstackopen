@@ -43,3 +43,16 @@ Live demo: https://phonebook-backend-j8qc.onrender.com
 - [`bloglist-frontend`](./part5/bloglist-frontend) — _5.1 to 5.16_ 
 - [`bloglist-backend`](./part5/bloglist-backend) — _Backend code from earlier parts, no new backend tests here_  
 - [`bloglist-e2e-testing`](./part5/bloglist-e2e-testing) — _5.17 to 5.23 - End-to-end tests with Playwright_
+
+---
+
+## 📓 Part 6 – State Management
+
+This part focuses on advanced state management patterns in React, including **Redux**, **Redux Toolkit**, **React Context**, and **React Query**.
+
+**Exercises:**  
+- [`unicafe-redux`](./part6/unicafe-redux) — _6.1 to 6.2_  
+- [`redux-anecdotes`](./part6/redux-anecdotes) — _6.3 to 6.19_  
+- [`query-anecdotes`](./part6/query-anecdotes) — _6.20 to 6.24_
+
+The exercises cover reducer-based state management, asynchronous actions, query caching and invalidation, custom hooks, and separating application logic from UI components.
