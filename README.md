@@ -37,6 +37,25 @@ Live demo: https://phonebook-backend-j8qc.onrender.com
 
 ---
 
+## 📒 Part 4 – Bloglist Backend & Authentication
+
+This part focuses on building a **full-featured backend** for the Bloglist application using **Node.js**, **Express**, and **MongoDB**, with a strong emphasis on **testing** and **authentication**.
+
+The implementation is located in a separate repository:
+
+**Repository:**  
+[bloglist-backend](https://github.com/Akiz-Ivanov/bloglist-backend)
+
+This part covers:
+
+- Structuring an Express + MongoDB backend  
+- Writing backend tests with **Jest** and **Supertest**  
+- User authentication with **bcrypt** and **JWT**  
+- Protecting routes and handling authorization  
+- Middleware, error handling, and environment configs  
+
+---
+
 ## 📕 Part 5 – Testing React Apps
 
 **Exercises:**  
