@@ -1,61 +1,43 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
-import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import { setNotification } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { createNewBlog, deleteBlog, initializeBlogs, likeBlog } from './reducers/blogReducer'
+import { loginUser, loginUserFromStorage, logoutUser } from './reducers/userReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const dispatch = useDispatch()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
+
+  const user = useSelector(state => state.user)
+  const blogs = useSelector(state => state.blogs)
 
   const sortedBlogs = blogs.toSorted((a, b) => b.likes - a.likes)
 
   const blogFormRef = useRef(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-
-    if (!loggedUserJSON) return
-
-    const user = JSON.parse(loggedUserJSON)
-
-    if (!user || !user.token) return
-
-    setUser(user)
-    blogService.setToken(user.token)
+    dispatch(loginUserFromStorage())
   }, [])
 
   const sendNotification = (text) => {
-    setNotification(text)
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    dispatch(setNotification(text, 5))
   }
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password
-      })
-
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token)
-      setUser(user)
+      await dispatch(loginUser(username, password))
       setUsername('')
       setPassword('')
       sendNotification('Successful login!')
@@ -65,8 +47,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
+    dispatch(logoutUser())
     sendNotification('Logged out')
   }
 
@@ -78,16 +59,11 @@ const App = () => {
     setPassword(target.value)
   }
 
-  const handleLike = async (blogObject) => {
+  const handleLike = async (blog) => {
     try {
-      const updatedBlog = {
-        ...blogObject,
-        likes: blogObject.likes + 1
-      }
-      const returnedBlog = await blogService.addLike(updatedBlog)
-      setBlogs(prevBlogs => prevBlogs.map(blog => blog.id !== returnedBlog.id ? blog : returnedBlog))
-    } catch (exception) {
-      sendNotification(`Blog '${blogObject.title}' was already removed from server`)
+      await dispatch(likeBlog(blog))
+    } catch {
+      sendNotification(`Blog '${blog.title}' was already removed from server`)
     }
   }
 
@@ -96,10 +72,9 @@ const App = () => {
     if (!confirmDelete) return
 
     try {
-      await blogService.deleteBlog(id)
-      setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id))
+      await dispatch(deleteBlog(id))
       sendNotification('Blog deleted successfully')
-    } catch (error) {
+    } catch {
       sendNotification('Failed to delete the blog')
     }
   }
@@ -118,11 +93,11 @@ const App = () => {
 
   const createBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
+
     try {
-      const returnedBlog = await blogService.createBlog(blogObject)
-      setBlogs(prevBlogs => prevBlogs.concat(returnedBlog))
-      sendNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-    } catch (exception) {
+      await dispatch(createNewBlog(blogObject))
+      sendNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+    } catch {
       sendNotification('Failed to add blog. Please check your input or try again later.')
     }
   }
@@ -137,7 +112,7 @@ const App = () => {
     <div>
       <h1>Blog List App</h1>
 
-      <Notification message={notification} />
+      <Notification />
 
       {!user && loginForm()}
 

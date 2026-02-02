@@ -29,7 +29,7 @@ const useResource = (baseUrl) => {
   }
 
   const service = {
-    create,
+    create
   }
 
   return [
