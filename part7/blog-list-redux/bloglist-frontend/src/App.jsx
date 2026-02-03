@@ -8,12 +8,23 @@ import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { createNewBlog, deleteBlog, initializeBlogs, likeBlog } from './reducers/blogReducer'
 import { loginUser, loginUserFromStorage, logoutUser } from './reducers/userReducer'
+import UsersView from './components/UsersView'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link,
+  useMatch
+} from 'react-router-dom'
+import User from './components/User'
+import userService from './services/users'
+import BlogList from './components/BlogList'
+import BlogView from './components/BlogView'
 
 const App = () => {
   const dispatch = useDispatch()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [users, setUsers] = useState([])
 
   const user = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
@@ -28,6 +39,21 @@ const App = () => {
 
   useEffect(() => {
     dispatch(loginUserFromStorage())
+  }, [])
+
+
+  useEffect(() => {
+
+    const loadUsers = async () => {
+      try {
+        const users = await userService.getAll()
+        setUsers(users)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    loadUsers()
   }, [])
 
   const sendNotification = (text) => {
@@ -108,6 +134,12 @@ const App = () => {
     </Togglable>
   )
 
+  const matchUser = useMatch('/users/:id')
+  const selectedUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
+
+  const matchBlog = useMatch('/blogs/:id')
+  const selectedBlog = matchBlog ? sortedBlogs.find(blog => blog.id === matchBlog.params.id) : null
+
   return (
     <div>
       <h1>Blog List App</h1>
@@ -120,31 +152,40 @@ const App = () => {
         <div>
           <div>
 
-            <p>{user.name} logged in</p>
 
-            <button
-              type='button'
-              onClick={handleLogout}
-            >
-              logout
-            </button>
+            <header>
+              <nav>
+                <Link to="/">blogs</Link> | <Link to="/users">users</Link>
+              </nav>
+
+              <p>{user.name} logged in</p>
+              <button
+                type='button'
+                onClick={handleLogout}
+              >
+                logout
+              </button>
+            </header>
+
 
             {newBlogForm()}
 
           </div>
 
-          <h2>blogs</h2>
-          <ul
-            style={{
-              margin: '0',
-              paddingLeft: '0',
-            }}
-            className='blog-list'
-          >
-            {sortedBlogs.map(blog =>
-              <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDeleteBlog={handleDeleteBlog} user={user ? user.name : null} />
-            )}
-          </ul>
+          <Routes>
+            <Route path="/blogs/:id" element={
+              <BlogView
+                blog={selectedBlog}
+                handleLike={handleLike}
+                handleDeleteBlog={handleDeleteBlog}
+                user={user}
+              />
+            } />
+            <Route path="/users/:id" element={<User user={selectedUser} />} />
+            <Route path="/users" element={<UsersView users={users} />} />
+            <Route path="/" element={<BlogList blogs={blogs} />} />
+          </Routes>
+
         </div>
       )}
 
