@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
@@ -28,8 +27,6 @@ const App = () => {
 
   const user = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
-
-  const sortedBlogs = blogs.toSorted((a, b) => b.likes - a.likes)
 
   const blogFormRef = useRef(null)
 
@@ -138,7 +135,7 @@ const App = () => {
   const selectedUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
 
   const matchBlog = useMatch('/blogs/:id')
-  const selectedBlog = matchBlog ? sortedBlogs.find(blog => blog.id === matchBlog.params.id) : null
+  const selectedBlog = matchBlog ? blogs.find(blog => blog.id === matchBlog.params.id) : null
 
   return (
     <div>

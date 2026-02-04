@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef, use } from 'react'
-import Blog from './components/Blog'
+import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -8,6 +7,12 @@ import BlogForm from './components/BlogForm'
 import { useSetNotification } from './context/NotificationContext'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useLogin, useLogout, useUserFromStorage, useUserValue } from './context/UserContext'
+import { Link, Route, Routes, useMatch } from 'react-router-dom'
+import BlogList from './components/BlogList'
+import userService from './services/users'
+import UsersView from './components/UsersView'
+import BlogView from './components/BlogView'
+import User from './components/User'
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -23,7 +28,12 @@ const App = () => {
     retry: 1,
   })
 
-  const sortedBlogs = blogs.toSorted((a, b) => b.likes - a.likes)
+  const { data: users = [], isLoading: isLoadingUsers, isError: isErrorUsers } = useQuery({
+    queryKey: ['users'],
+    queryFn: userService.getAll,
+    retry: 1
+  })
+
   const blogFormRef = useRef(null)
 
   const setNotification = useSetNotification()
@@ -141,6 +151,12 @@ const App = () => {
     </Togglable>
   )
 
+  const matchUser = useMatch('/users/:id')
+  const selectedUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
+
+  const matchBlog = useMatch('/blogs/:id')
+  const selectedBlog = matchBlog ? blogs.find(blog => blog.id === matchBlog.params.id) : null
+
   return (
     <div>
       <h1>Blog List App</h1>
@@ -153,31 +169,51 @@ const App = () => {
         <div>
           <div>
 
-            <p>{user.name} logged in</p>
+            <header>
+              <nav>
+                <Link to="/">blogs</Link> | <Link to="/users">users</Link>
+              </nav>
 
-            <button
-              type='button'
-              onClick={handleLogout}
-            >
-              logout
-            </button>
+              <p>{user.name} logged in</p>
+              <button
+                type='button'
+                onClick={handleLogout}
+              >
+                logout
+              </button>
+            </header>
 
             {newBlogForm()}
 
           </div>
 
-          <h2>blogs</h2>
-          <ul
-            style={{
-              margin: '0',
-              paddingLeft: '0',
-            }}
-            className='blog-list'
-          >
-            {sortedBlogs.map(blog =>
-              <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDeleteBlog={handleDeleteBlog} user={user ? user.name : null} />
-            )}
-          </ul>
+          <Routes>
+            <Route path="/blogs/:id" element={
+              <BlogView
+                blog={selectedBlog}
+                handleLike={handleLike}
+                handleDeleteBlog={handleDeleteBlog}
+                user={user}
+              />
+            } />
+            <Route path="/users/:id" element={<User user={selectedUser} />} />
+            <Route path="/users" element={
+              isLoadingUsers ? (
+                <p>Loading users...</p>
+              ) : isErrorUsers ? (
+                <p>Failed to load users</p>
+              ) : (
+                <UsersView users={users} />
+              )
+            }
+            />
+            <Route path="/" element={
+              <BlogList
+                blogs={blogs}
+              />}
+            />
+          </Routes>
+
           {isLoading && <p>Loading blogs...</p>}
           {isError && <p>Failed to load blogs</p>}
         </div>

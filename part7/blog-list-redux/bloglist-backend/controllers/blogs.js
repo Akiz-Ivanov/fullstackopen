@@ -86,7 +86,12 @@ blogsRouter.post("/:id/comments", async (request, response) => {
   blogToUpdate.comments = blogToUpdate.comments.concat(comment);
   const updatedBlog = await blogToUpdate.save();
 
-  response.status(201).json(updatedBlog);
+  const populatedBlog = await updatedBlog.populate("user", {
+    username: 1,
+    name: 1,
+  });
+
+  response.status(201).json(populatedBlog);
 });
 
 module.exports = blogsRouter;
