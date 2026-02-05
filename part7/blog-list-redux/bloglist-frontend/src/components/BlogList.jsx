@@ -1,26 +1,35 @@
+import { Paper, Typography, Stack, Box } from '@mui/material'
 import Blog from './Blog'
 
 const BlogList = ({ blogs }) => {
   const sortedBlogs = blogs.toSorted((a, b) => b.likes - a.likes)
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <ul
-        style={{
-          margin: '0',
-          paddingLeft: '0',
-        }}
-        className='blog-list'
-      >
-        {sortedBlogs.map(blog =>
-          <Blog
+    <Box sx={{ mt: 4 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
+        Blogs
+      </Typography>
+
+      <Stack spacing={2}>
+        {sortedBlogs.map(blog => (
+          <Paper
             key={blog.id}
-            blog={blog}
-          />
-        )}
-      </ul>
-    </div>
+            elevation={2}
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              transition: '0.15s',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: 6,
+              },
+            }}
+          >
+            <Blog blog={blog} />
+          </Paper>
+        ))}
+      </Stack>
+    </Box>
   )
 }
 

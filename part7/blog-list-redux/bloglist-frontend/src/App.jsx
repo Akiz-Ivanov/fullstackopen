@@ -8,18 +8,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createNewBlog, deleteBlog, initializeBlogs, likeBlog } from './reducers/blogReducer'
 import { loginUser, loginUserFromStorage, logoutUser } from './reducers/userReducer'
 import UsersView from './components/UsersView'
-import {
-  BrowserRouter as Router,
-  Routes, Route, Link,
-  useMatch
-} from 'react-router-dom'
+import { Routes, Route, useMatch, useNavigate, useLocation } from 'react-router-dom'
 import User from './components/User'
 import userService from './services/users'
 import BlogList from './components/BlogList'
 import BlogView from './components/BlogView'
+import Navbar from './components/NavBar'
+import { Box, Container, Paper } from '@mui/material'
+import Footer from './components/Footer'
 
-const App = () => {
+const App = ({ toggleTheme, mode }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isHomePage = location.pathname === "/"
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -55,6 +57,15 @@ const App = () => {
 
   const sendNotification = (text) => {
     dispatch(setNotification(text, 5))
+  }
+
+  const reloadUsers = async () => {
+    try {
+      const updatedUsers = await userService.getAll()
+      setUsers(updatedUsers)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleLogin = async (event) => {
@@ -97,21 +108,11 @@ const App = () => {
     try {
       await dispatch(deleteBlog(id))
       sendNotification('Blog deleted successfully')
+      navigate('/')
+      await reloadUsers()
     } catch {
       sendNotification('Failed to delete the blog')
     }
-  }
-
-  const loginForm = () => {
-    return (
-      <LoginForm
-        handleSubmit={handleLogin}
-        handleUsernameChange={handleUsernameChange}
-        handlePasswordChange={handlePasswordChange}
-        username={username}
-        password={password}
-      />
-    )
   }
 
   const createBlog = async (blogObject) => {
@@ -120,16 +121,11 @@ const App = () => {
     try {
       await dispatch(createNewBlog(blogObject))
       sendNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+      await reloadUsers()
     } catch {
       sendNotification('Failed to add blog. Please check your input or try again later.')
     }
   }
-
-  const newBlogForm = () => (
-    <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm createBlog={createBlog} />
-    </Togglable>
-  )
 
   const matchUser = useMatch('/users/:id')
   const selectedUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
@@ -138,55 +134,59 @@ const App = () => {
   const selectedBlog = matchBlog ? blogs.find(blog => blog.id === matchBlog.params.id) : null
 
   return (
-    <div>
-      <h1>Blog List App</h1>
-
-      <Notification />
-
-      {!user && loginForm()}
-
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {user && (
-        <div>
-          <div>
-
-
-            <header>
-              <nav>
-                <Link to="/">blogs</Link> | <Link to="/users">users</Link>
-              </nav>
-
-              <p>{user.name} logged in</p>
-              <button
-                type='button'
-                onClick={handleLogout}
-              >
-                logout
-              </button>
-            </header>
-
-
-            {newBlogForm()}
-
-          </div>
-
-          <Routes>
-            <Route path="/blogs/:id" element={
-              <BlogView
-                blog={selectedBlog}
-                handleLike={handleLike}
-                handleDeleteBlog={handleDeleteBlog}
-                user={user}
-              />
-            } />
-            <Route path="/users/:id" element={<User user={selectedUser} />} />
-            <Route path="/users" element={<UsersView users={users} />} />
-            <Route path="/" element={<BlogList blogs={blogs} />} />
-          </Routes>
-
-        </div>
+        <Navbar
+          user={user}
+          handleLogout={handleLogout}
+          toggleTheme={toggleTheme}
+          mode={mode}
+        />
       )}
 
-    </div>
+      <Container maxWidth="lg" sx={{ flexGrow: 1, mt: 4 }}>
+        <Notification />
+
+        {!user && (
+          <LoginForm
+            handleSubmit={handleLogin}
+            handleUsernameChange={handleUsernameChange}
+            handlePasswordChange={handlePasswordChange}
+            username={username}
+            password={password}
+          />
+        )}
+
+        {user && (
+          <Box sx={{ p: 2, mb: 2 }}>
+            {isHomePage && (
+              <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                <BlogForm createBlog={createBlog} />
+              </Togglable>
+            )}
+
+            <Routes>
+              <Route
+                path="/blogs/:id"
+                element={
+                  <BlogView
+                    blog={selectedBlog}
+                    handleLike={handleLike}
+                    handleDeleteBlog={handleDeleteBlog}
+                    user={user}
+                  />
+                }
+              />
+              <Route path="/users/:id" element={<User user={selectedUser} />} />
+              <Route path="/users" element={<UsersView users={users} />} />
+              <Route path="/" element={<BlogList blogs={blogs} />} />
+            </Routes>
+          </Box>
+        )}
+      </Container>
+
+      <Footer />
+    </Box>
   )
 }
 

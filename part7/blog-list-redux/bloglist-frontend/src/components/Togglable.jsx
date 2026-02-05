@@ -1,12 +1,11 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
+import { Button, Box, Collapse } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import CancelIcon from '@mui/icons-material/Cancel'
 
-const Togglable = forwardRef(({ buttonLabel, children }, ref ) => {
-
+const Togglable = forwardRef(({ buttonLabel, children }, ref) => {
   const [visible, setVisible] = useState(false)
-
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -19,25 +18,33 @@ const Togglable = forwardRef(({ buttonLabel, children }, ref ) => {
   })
 
   return (
-    <div>
-      <div style={hideWhenVisible}>
-        <button
-          type="button"
+    <Box sx={{ mb: 2 }}>
+      {!visible && (
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
           onClick={toggleVisibility}
         >
           {buttonLabel}
-        </button>
-      </div>
-      <div style={showWhenVisible} className='togglable-div'>
-        {children}
-        <button
-          type="button"
-          onClick={toggleVisibility}
-        >
-          cancel
-        </button>
-      </div>
-    </div>
+        </Button>
+      )}
+
+      <Collapse in={visible} timeout={700}>
+        <Box sx={{ mt: 2 }}>
+          {children}
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<CancelIcon />}
+            onClick={toggleVisibility}
+            sx={{ mt: 2 }}
+          >
+            Cancel
+          </Button>
+        </Box>
+      </Collapse>
+    </Box>
   )
 })
 
