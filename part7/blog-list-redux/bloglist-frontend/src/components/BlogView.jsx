@@ -24,7 +24,6 @@ const BlogView = ({ blog, handleLike, handleDeleteBlog, user }) => {
       sx={{
         p: 3,
         borderRadius: 3,
-        mt: 3,
       }}
     >
       <Stack spacing={2}>

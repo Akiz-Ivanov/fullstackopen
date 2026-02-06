@@ -8,8 +8,7 @@ import userReducer from './reducers/userReducer'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-import './index.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const typography = {
   fontFamily: 'Inter, Arial, sans-serif',
@@ -52,6 +51,11 @@ const darkTheme = createTheme({
   typography
 })
 
+const getInitialMode = () => {
+  const saved = localStorage.getItem("themeMode")
+  return saved === "dark" ? "dark" : "light"
+}
+
 const store = configureStore({
   reducer: {
     blogs: blogReducer,
@@ -61,9 +65,13 @@ const store = configureStore({
 })
 
 function Root() {
-  const [mode, setMode] = useState('light')
+  const [mode, setMode] = useState(() => getInitialMode())
   const theme = mode === 'light' ? lightTheme : darkTheme
   const toggleTheme = () => setMode(prev => prev === 'light' ? 'dark' : 'light')
+
+  useEffect(() => {
+    localStorage.setItem("themeMode", mode)
+  }, [mode])
 
   return (
     <Provider store={store}>
