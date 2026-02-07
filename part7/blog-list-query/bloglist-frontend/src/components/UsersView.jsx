@@ -1,43 +1,46 @@
 import { Link } from 'react-router-dom'
+import { Container, Table } from 'react-bootstrap'
 
 const UsersView = ({ users }) => {
-
-
-  if (users.length === 0) {
+  if (!users || users.length === 0) {
     return (
-      <div>
+      <Container className="mt-4">
         <h2>Users</h2>
-        <p>No users.</p>
-      </div>
+        <p className="text-muted">No users yet.</p>
+      </Container>
     )
   }
 
   return (
-    <div>
-      <h2>Users</h2>
-      <table>
+    <Container className="mt-4">
+      <h2 className="mb-4">Users</h2>
+      <Table striped hover responsive>
         <thead>
           <tr>
-            <th>
-              user
-            </th>
-            <th>blogs created</th>
+            <th>User</th>
+            <th>Blogs Created</th>
           </tr>
         </thead>
         <tbody>
           {users.map(user => (
             <tr key={user.id}>
               <td>
-                <Link to={`/users/${user.id}`}>
+                <Link
+                  to={`/users/${user.id}`}
+                  className="fw-semibold text-decoration-none"
+                  style={{ color: '#d97636' }}
+                >
                   {user.name}
                 </Link>
               </td>
-              <td>{user.blogs.length}</td>
+              <td>
+                <span className="badge bg-secondary">{user.blogs.length}</span>
+              </td>
             </tr>
           ))}
         </tbody>
-      </table>
-    </div>
+      </Table>
+    </Container>
   )
 }
 

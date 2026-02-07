@@ -1,25 +1,20 @@
-import Blog from "./Blog";
+import { ListGroup } from 'react-bootstrap'
+import Blog from "./Blog"
 
-const BlogList = ({ blogs, handleLike, handleDeleteBlog, user }) => {
+const BlogList = ({ blogs }) => {
   const sortedBlogs = blogs.toSorted((a, b) => b.likes - a.likes)
 
   return (
     <div>
-      <h2>blogs</h2>
-      <ul
-        style={{
-          margin: '0',
-          paddingLeft: '0',
-        }}
-        className='blog-list'
-      >
+      <h2 className="mb-3">Blogs</h2>
+      <ListGroup>
         {sortedBlogs.map(blog =>
           <Blog
             key={blog.id}
             blog={blog}
           />
         )}
-      </ul>
+      </ListGroup>
     </div>
   )
 }

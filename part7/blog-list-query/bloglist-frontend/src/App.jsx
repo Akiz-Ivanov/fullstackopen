@@ -7,12 +7,15 @@ import BlogForm from './components/BlogForm'
 import { useSetNotification } from './context/NotificationContext'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useLogin, useLogout, useUserFromStorage, useUserValue } from './context/UserContext'
-import { Link, Route, Routes, useMatch } from 'react-router-dom'
+import { Route, Routes, useLocation, useMatch } from 'react-router-dom'
 import BlogList from './components/BlogList'
 import userService from './services/users'
 import UsersView from './components/UsersView'
 import BlogView from './components/BlogView'
 import User from './components/User'
+import { Container } from 'react-bootstrap'
+import Header from './components/Header'
+import Footer from './components/Footer'
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -41,6 +44,15 @@ const App = () => {
   const login = useLogin()
   const logout = useLogout()
   const userFromStorage = useUserFromStorage()
+
+  const reloadUsers = async () => {
+    try {
+      const updatedUsers = await userService.getAll()
+      setUsers(updatedUsers)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const newBlogMutation = useMutation({
     mutationFn: blogService.createBlog,
@@ -121,103 +133,99 @@ const App = () => {
     updateBlogLikesMutation.mutate(updatedBlog)
   }
 
-  const handleDeleteBlog = (id) => {
+  const handleDeleteBlog = async (id) => {
     const confirmDelete = window.confirm('Delete blog?')
     if (!confirmDelete) return
 
     deleteBlogMutation.mutate(id)
+
+    await reloadUsers()
   }
 
-  const loginForm = () => {
-    return (
-      <LoginForm
-        handleSubmit={handleLogin}
-        handleUsernameChange={handleUsernameChange}
-        handlePasswordChange={handlePasswordChange}
-        username={username}
-        password={password}
-      />
-    )
-  }
-
-  const createBlog = (blogObject) => {
+  const createBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     newBlogMutation.mutate(blogObject)
+    await reloadUsers()
   }
-
-  const newBlogForm = () => (
-    <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm createBlog={createBlog} />
-    </Togglable>
-  )
-
   const matchUser = useMatch('/users/:id')
   const selectedUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
 
   const matchBlog = useMatch('/blogs/:id')
   const selectedBlog = matchBlog ? blogs.find(blog => blog.id === matchBlog.params.id) : null
 
+  const location = useLocation()
+  const isHomePage = location.pathname === "/"
+
   return (
-    <div>
-      <h1>Blog List App</h1>
+    <div className="app-layout d-flex flex-column min-vh-100">
 
       <Notification />
 
-      {!user && loginForm()}
+
+      {!user && (
+        <LoginForm
+          handleSubmit={handleLogin}
+          handleUsernameChange={handleUsernameChange}
+          handlePasswordChange={handlePasswordChange}
+          username={username}
+          password={password}
+        />
+      )}
 
       {user && (
-        <div>
-          <div>
+        <>
 
-            <header>
-              <nav>
-                <Link to="/">blogs</Link> | <Link to="/users">users</Link>
-              </nav>
+          <Header user={user} handleLogout={handleLogout} />
 
-              <p>{user.name} logged in</p>
-              <button
-                type='button'
-                onClick={handleLogout}
-              >
-                logout
-              </button>
-            </header>
+          <Container className='flex-grow-1'>
 
-            {newBlogForm()}
-
-          </div>
-
-          <Routes>
-            <Route path="/blogs/:id" element={
-              <BlogView
-                blog={selectedBlog}
-                handleLike={handleLike}
-                handleDeleteBlog={handleDeleteBlog}
-                user={user}
+            <Routes>
+              <Route path="/blogs/:id" element={
+                <BlogView
+                  blog={selectedBlog}
+                  handleLike={handleLike}
+                  handleDeleteBlog={handleDeleteBlog}
+                  user={user}
+                />
+              } />
+              <Route path="/users/:id" element={<User user={selectedUser} />} />
+              <Route path="/users" element={
+                isLoadingUsers ? (
+                  <p>Loading users...</p>
+                ) : isErrorUsers ? (
+                  <p>Failed to load users</p>
+                ) : (
+                  <UsersView users={users} />
+                )
+              }
               />
-            } />
-            <Route path="/users/:id" element={<User user={selectedUser} />} />
-            <Route path="/users" element={
-              isLoadingUsers ? (
-                <p>Loading users...</p>
-              ) : isErrorUsers ? (
-                <p>Failed to load users</p>
-              ) : (
-                <UsersView users={users} />
-              )
-            }
-            />
-            <Route path="/" element={
-              <BlogList
-                blogs={blogs}
-              />}
-            />
-          </Routes>
+              <Route
+                path="/"
+                element={
+                  isLoading ? (
+                    <p>Loading blogs...</p>
+                  ) : isError ? (
+                    <p>Failed to load blogs</p>
+                  ) : (
+                    <BlogList blogs={blogs} />
+                  )
+                }
+              />
+            </Routes>
+            {isHomePage && (
+              <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                <BlogForm createBlog={createBlog} />
+              </Togglable>
+            )}
+
+          </Container>
 
           {isLoading && <p>Loading blogs...</p>}
           {isError && <p>Failed to load blogs</p>}
-        </div>
+        </>
       )}
+
+      <Footer />
 
     </div>
   )
