@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import BlogView from './BlogView'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { renderWithProviders } from './test-utils'
 
 describe('<BlogView /> testing', () => {
 
@@ -21,11 +22,9 @@ describe('<BlogView /> testing', () => {
   const userSim = userEvent.setup()
   const queryClient = new QueryClient()
 
-  let container
-
   beforeEach(() => {
     vi.clearAllMocks()
-    container = render(
+    renderWithProviders(
       <QueryClientProvider client={queryClient}>
         <BlogView
           blog={blog}
@@ -34,7 +33,7 @@ describe('<BlogView /> testing', () => {
           handleDeleteBlog={handleDelete}
         />
       </QueryClientProvider>
-    ).container
+    )
   })
 
   test('renders all blog details', async () => {

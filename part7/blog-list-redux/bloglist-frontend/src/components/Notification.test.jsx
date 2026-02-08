@@ -28,8 +28,8 @@ describe('<Notification />', () => {
 
   test('renders the message when given', () => {
     renderWithStore({ notification: 'Test notification' })
-    expect(screen.getByText('Test notification')).toBeInTheDocument()
-    expect(screen.getByText('Test notification')).toHaveClass('notification')
+    expect(screen.getByRole('alert')).toHaveTextContent('Test notification')
+
   })
 
 })

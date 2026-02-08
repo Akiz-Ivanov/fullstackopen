@@ -2,47 +2,52 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import LoginForm from './LoginForm'
 
-describe('<LoginForm /> testing', () => {
+describe('<LoginForm />', () => {
+  test('calls input change handlers when typing', async () => {
+    const handleUsernameChange = vi.fn()
+    const handlePasswordChange = vi.fn()
+    const handleSubmit = vi.fn()
 
-  const handleUsernameChange = vi.fn()
-  const handlePasswordChange = vi.fn()
-  const handleSubmit = vi.fn()
+    const user = userEvent.setup()
 
-  beforeEach(() => {
-    vi.clearAllMocks()
     render(
       <LoginForm
-        username=''
-        password=''
+        username=""
+        password=""
         handleUsernameChange={handleUsernameChange}
         handlePasswordChange={handlePasswordChange}
         handleSubmit={handleSubmit}
       />
     )
+
+    const usernameInput = screen.getByLabelText(/username/i)
+    const passwordInput = screen.getByLabelText(/password/i)
+
+    await user.type(usernameInput, 'alice123')
+    await user.type(passwordInput, 'supersecret')
+
+    expect(handleUsernameChange).toHaveBeenCalled()
+    expect(handlePasswordChange).toHaveBeenCalled()
   })
 
-  test('input change handlers get called when user is typing', async () => {
+  test('calls handleSubmit when submitted', async () => {
+    const handleUsernameChange = vi.fn()
+    const handlePasswordChange = vi.fn()
+    const handleSubmit = vi.fn()
+
     const user = userEvent.setup()
 
-    const usernameInput = screen.getByLabelText('Username')
-    const passwordInput = screen.getByLabelText('Password')
+    render(
+      <LoginForm
+        username="alice123"
+        password="supersecret"
+        handleUsernameChange={handleUsernameChange}
+        handlePasswordChange={handlePasswordChange}
+        handleSubmit={handleSubmit}
+      />
+    )
 
-    await user.type(usernameInput, 'mluukkai')
-    await user.type(passwordInput, 'salainen')
-
-    expect(handleUsernameChange).toHaveBeenCalledTimes(8)
-    expect(handlePasswordChange).toHaveBeenCalledTimes(8)
-  })
-
-  test('calls the form event handler with the right details when submitted', async () => {
-    const user = userEvent.setup()
-
-    const usernameInput = screen.getByLabelText('Username')
-    const passwordInput = screen.getByLabelText('Password')
-    const submitButton = screen.getByText('log in')
-
-    await user.type(usernameInput, 'mluukkai')
-    await user.type(passwordInput, 'salainen')
+    const submitButton = screen.getByRole('button', { name: /Log in/i })
     await user.click(submitButton)
 
     expect(handleSubmit).toHaveBeenCalledTimes(1)

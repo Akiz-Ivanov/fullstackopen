@@ -10,7 +10,7 @@ const Blog = ({ blog }) => {
   const commentCount = blog.comments ? blog.comments.length : 0
 
   if (!isDesktop) {
-    // Mobile layout - vertical stack
+    //* Mobile layout - vertical stack
     return (
       <Stack spacing={1}>
         <Link
@@ -53,7 +53,7 @@ const Blog = ({ blog }) => {
     )
   }
 
-  // Desktop layout
+  //* Desktop layout
   return (
     <Stack direction="row" justifyContent="space-between" alignItems="center">
       <Box>

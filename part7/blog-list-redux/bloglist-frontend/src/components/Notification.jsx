@@ -47,6 +47,7 @@ const Notification = () => {
         severity={getSeverity()}
         variant="filled"
         sx={{ width: '100%', borderRadius: '.75rem' }}
+        className="notification"
       >
         {message}
       </Alert>

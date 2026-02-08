@@ -21,7 +21,7 @@ const LoginForm = ({
           </h2>
 
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3" controlId="username">
               <Form.Label className="fw-semibold">Username</Form.Label>
               <InputGroup>
                 <InputGroup.Text>
@@ -36,7 +36,7 @@ const LoginForm = ({
               </InputGroup>
             </Form.Group>
 
-            <Form.Group className="mb-4">
+            <Form.Group className="mb-4" controlId="password">
               <Form.Label className="fw-semibold">Password</Form.Label>
               <InputGroup>
                 <InputGroup.Text>

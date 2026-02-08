@@ -20,7 +20,7 @@ const Notification = () => {
   }
 
   return (
-    <ToastContainer position="top-center" className="p-3">
+    <ToastContainer position="top-center" className="p-3 notification">
       <Toast
         onClose={() => setNotification('')}
         autohide

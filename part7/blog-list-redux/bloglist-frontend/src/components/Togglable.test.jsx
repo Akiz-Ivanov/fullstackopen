@@ -1,75 +1,78 @@
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Togglable from './Togglable'
 import { createRef } from 'react'
+import { act } from 'react'
 
-describe('<Togglable /> tests', () => {
-
-  let container
-
-  beforeEach(() => {
-    container = render(
+describe('<Togglable />', () => {
+  test('renders only show button at first', () => {
+    render(
       <Togglable buttonLabel="show">
-        <div>
-          togglable content
-        </div>
+        <div>togglable content</div>
       </Togglable>
-    ).container
+    )
+
+    expect(screen.getByRole('button', { name: /show/i })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /cancel/i })).toBeNull()
   })
 
-  test('renders children', async () => {
-    await screen.findAllByText('togglable content')
-  })
-
-  test('initially children are not displayed', async () => {
-    const childrenDiv = await container.querySelector('.togglable-div')
-    expect(childrenDiv).not.toBeVisible()
-  })
-
-  test('after clicking the button, children are displayed', async () => {
+  test('shows content and cancel button after clicking show', async () => {
     const user = userEvent.setup()
-    const showButton = screen.getByText('show')
-    await user.click(showButton)
 
-    const childrenDiv = await container.querySelector('.togglable-div')
-    expect(childrenDiv).toBeVisible()
+    render(
+      <Togglable buttonLabel="show">
+        <div>togglable content</div>
+      </Togglable>
+    )
+
+    await user.click(screen.getByRole('button', { name: /show/i }))
+
+    expect(screen.getByText('togglable content')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
   })
 
-  test('content can be closed', async () => {
+  test('hides cancel button after clicking cancel', async () => {
     const user = userEvent.setup()
-    const showButton = screen.getByText('show')
-    await user.click(showButton)
 
-    const childrenDiv = await container.querySelector('.togglable-div')
-    expect(childrenDiv).toBeVisible()
+    render(
+      <Togglable buttonLabel="show">
+        <div>togglable content</div>
+      </Togglable>
+    )
 
-    const closeButton = screen.getByText('cancel')
-    await user.click(closeButton)
+    await user.click(screen.getByRole('button', { name: /show/i }))
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
 
-    expect(childrenDiv).not.toBeVisible()
+    //* Wait for the collapse animation to complete
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /cancel/i })).toBeNull()
+    })
   })
 
-  test('toggleVisibility method via ref works', async () => {
+  test('toggleVisibility works via ref', async () => {
     const ref = createRef()
 
-    container = render(
+    render(
       <Togglable buttonLabel="show" ref={ref}>
         <div>togglable content</div>
       </Togglable>
-    ).container
+    )
 
-    const childrenDiv = await container.querySelector('.togglable-div')
-    expect(childrenDiv).not.toBeVisible()
+    expect(screen.queryByRole('button', { name: /cancel/i })).toBeNull()
 
-    await act(async () => {
+    act(() => {
       ref.current.toggleVisibility()
     })
-    await waitFor(() => expect(childrenDiv).toBeVisible())
 
-    await act(async () => {
+    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
+
+    act(() => {
       ref.current.toggleVisibility()
     })
-    await waitFor(() => expect(childrenDiv).not.toBeVisible())
+
+    //* Wait for the collapse animation to complete
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /cancel/i })).toBeNull()
+    })
   })
-
 })

@@ -1,77 +1,64 @@
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router-dom'
 import Blog from './Blog'
 
-describe('<Blog /> testing', () => {
-
+describe('<Blog />', () => {
   const blog = {
+    id: '123',
     title: 'How to test React components',
     author: 'Test Master',
-    url: 'https://blog.test.com',
     likes: 5,
-    user: { name: 'TestUser' },
+    comments: ['nice', 'cool']
   }
 
-  const user = 'TestUser'
+  test('renders title and author', () => {
+    render(
+      <MemoryRouter>
+        <Blog blog={blog} />
+      </MemoryRouter>
+    )
 
-  const handleLike = vi.fn()
-  const handleDelete = vi.fn()
-
-  let container
-
-  beforeEach(() => {
-    vi.clearAllMocks()
-    container = render(
-      <Blog
-        blog={blog}
-        user={user}
-        handleLike={handleLike}
-        handleDeleteBlog={handleDelete}
-      />
-    ).container
+    expect(screen.getByText('How to test React components')).toBeInTheDocument()
+    expect(screen.getByText('Test Master')).toBeInTheDocument()
   })
 
-  test('renders title and author but not url or likes by default', () => {
-    expect(screen.getByText(/How to test React components/)).toBeDefined()
-    expect(screen.getByText(/Test Master/)).toBeDefined()
+  test('renders likes and comment count', () => {
+    render(
+      <MemoryRouter>
+        <Blog blog={blog} />
+      </MemoryRouter>
+    )
 
-    const div = container.querySelector('.details')
-    expect(div).toBeNull()
+    expect(screen.getByText('5 likes')).toBeInTheDocument()
+    expect(screen.getByText('2')).toBeInTheDocument()
   })
 
-  test('renders blog URL and number of likes when show button is clicked', async () => {
-    const userSim = userEvent.setup()
-    const button = screen.getByText('view')
-    await userSim.click(button)
+  test('title link points to correct blog page', () => {
+    render(
+      <MemoryRouter>
+        <Blog blog={blog} />
+      </MemoryRouter>
+    )
 
-    const div = container.querySelector('.details')
-    expect(div).toBeDefined()
+    const link = screen.getByRole('link', { name: 'How to test React components' })
 
-    expect(screen.getByText('https://blog.test.com')).toBeDefined()
-    expect(screen.getByText(/likes/)).toBeDefined()
+    expect(link).toHaveAttribute('href', '/blogs/123')
   })
 
-  test('if the like button is clicked twice, the event handler is called twice', async () => {
-    const userSim = userEvent.setup()
-    const viewButton = screen.getByText('view')
-    await userSim.click(viewButton)
+  test('comment count is 0 if comments missing', () => {
+    const blogWithoutComments = {
+      id: '555',
+      title: 'No comments blog',
+      author: 'Silent Guy',
+      likes: 1
+    }
 
-    const likeButton = screen.getByText('Like')
-    await userSim.click(likeButton)
-    await userSim.click(likeButton)
+    render(
+      <MemoryRouter>
+        <Blog blog={blogWithoutComments} />
+      </MemoryRouter>
+    )
 
-    expect(handleLike.mock.calls).toHaveLength(2)
-  })
-
-  test('calls handleDeleteBlog when delete button is clicked', async () => {
-    const userSim = userEvent.setup()
-    const viewBtn = screen.getByText('view')
-    await userSim.click(viewBtn)
-
-    const deleteBtn = screen.getByText('delete')
-    await userSim.click(deleteBtn)
-
-    expect(handleDelete).toHaveBeenCalledTimes(1)
-    expect(handleDelete).toHaveBeenCalledWith(blog.id)
+    expect(screen.getByText('0')).toBeInTheDocument()
   })
 })
