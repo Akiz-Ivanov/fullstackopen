@@ -17,18 +17,16 @@ const Authors = (props) => {
     return null
   }
 
-  if (result.loading) {
-    return <div>loading...</div>
-  }
+  if (result.loading || !result.data) return <div>loading...</div>
+
 
   const authors = result.data.allAuthors
 
   const submit = async (event) => {
     event.preventDefault()
-
+    const selectedName = name || authors[0]?.name || ''
     const parsedBirthyear = parseInt(birthyear, 10)
-    editAuthor({ variables: { name, setBornTo: parsedBirthyear } })
-
+    editAuthor({ variables: { name: selectedName, setBornTo: parsedBirthyear } })
     setBirthyear('')
   }
 
@@ -60,8 +58,7 @@ const Authors = (props) => {
         <select
           id="name"
           name="name"
-          defaultValue={authors[0]}
-          value={name}
+          value={name || authors[0]?.name || ''}
           onChange={({ target }) => setName(target.value)}
         >
           {authors.map(author =>
