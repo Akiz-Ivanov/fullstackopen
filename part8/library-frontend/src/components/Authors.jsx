@@ -3,7 +3,6 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
 import { useState } from "react"
 
 const Authors = (props) => {
-
   const [name, setName] = useState('')
   const [birthyear, setBirthyear] = useState('')
 
@@ -50,42 +49,46 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <h3>Set birthyear</h3>
-      <form onSubmit={submit}>
-        <label htmlFor="name">
-          name
-        </label>
-        <select
-          id="name"
-          name="name"
-          value={name || authors[0]?.name || ''}
-          onChange={({ target }) => setName(target.value)}
-        >
-          {authors.map(author =>
-            <option
-              key={author.id}
-              value={author.name}
+      {props.token && (
+        <div>
+          <h3>Set birthyear</h3>
+          <form onSubmit={submit}>
+            <label htmlFor="name">
+              name
+            </label>
+            <select
+              id="name"
+              name="name"
+              value={name || authors[0]?.name || ''}
+              onChange={({ target }) => setName(target.value)}
             >
-              {author.name}
-            </option>
-          )}
-        </select>
+              {authors.map(author =>
+                <option
+                  key={author.id}
+                  value={author.name}
+                >
+                  {author.name}
+                </option>
+              )}
+            </select>
 
-        <label htmlFor="birthyear">
-          born
-        </label>
-        <input
-          id="birthyear"
-          name="birthyear"
-          type="number"
-          value={birthyear}
-          onChange={({ target }) => setBirthyear(target.value)}
-        />
+            <label htmlFor="birthyear">
+              born
+            </label>
+            <input
+              id="birthyear"
+              name="birthyear"
+              type="number"
+              value={birthyear}
+              onChange={({ target }) => setBirthyear(target.value)}
+            />
 
-        <button type="submit">
-          update author
-        </button>
-      </form>
+            <button type="submit">
+              update author
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   )
 }
