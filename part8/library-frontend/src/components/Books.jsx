@@ -10,7 +10,9 @@ const Books = (props) => {
   if (!props.show) return null
   if (initialResult.loading) return <div>loading...</div>
 
-  const books = filteredData?.allBooks ?? initialResult.data?.allBooks ?? []
+  const books = selectedGenre
+    ? (filteredData?.allBooks ?? [])
+    : (initialResult.data?.allBooks ?? [])
 
   const handleGenre = (genre) => {
     const genreVar = genre === 'all' ? undefined : genre

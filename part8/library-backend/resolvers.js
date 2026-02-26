@@ -1,16 +1,14 @@
 const { GraphQLError } = require("graphql");
+const { PubSub } = require("graphql-subscriptions");
 const jwt = require("jsonwebtoken");
+
 const Book = require("./models/book");
 const Author = require("./models/author");
 const User = require("./models/user");
 
+const pubsub = new PubSub();
+
 const resolvers = {
-  Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({ author: root._id });
-      return books.length;
-    },
-  },
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
@@ -32,7 +30,18 @@ const resolvers = {
 
       return Book.find(query).populate("author");
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => {
+      const authors = await Author.find({});
+      const books = await Book.find({});
+
+      return authors.map((author) => ({
+        ...author.toObject(),
+        id: author._id.toString(),
+        bookCount: books.filter(
+          (b) => b.author.toString() === author._id.toString(),
+        ).length,
+      }));
+    },
     me: (root, args, context) => {
       return context.currentUser;
     },
@@ -79,7 +88,10 @@ const resolvers = {
         });
       }
 
-      return Book.findById(newBook._id).populate("author");
+      const populatedBook = await Book.findById(newBook._id).populate("author");
+      pubsub.publish("BOOK_ADDED", { bookAdded: populatedBook });
+
+      return populatedBook;
     },
     editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) {
@@ -143,6 +155,11 @@ const resolvers = {
       };
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterableIterator("BOOK_ADDED"),
     },
   },
 };
