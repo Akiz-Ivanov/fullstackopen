@@ -18,7 +18,6 @@ const App = () => {
       const addedBook = data.data.bookAdded
       window.alert(`${addedBook.title} added`)
       addBookToCache(client.cache, addedBook)
-      console.log("Subscription works")
     }
   })
 

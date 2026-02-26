@@ -107,3 +107,24 @@ This part covers:
 - Notifications, user management, and complex state flows
 
 ---
+
+## 🟦 Part 8 – GraphQL
+
+This part introduces **GraphQL** as an alternative to REST for building APIs, covering both server and client-side implementation.
+
+**Exercises:**
+
+- [`library-backend`](./part8/library-backend) — _8.1 to 8.26 - GraphQL server with Apollo Server, Express, and MongoDB_
+- [`library-frontend`](./part8/library-frontend) — _8.17 to 8.26 - React client with Apollo Client_
+
+This part covers:
+
+- Designing a GraphQL schema with types, queries, mutations, and subscriptions
+- Building a GraphQL server with Apollo Server and Express
+- Connecting to MongoDB with Mongoose
+- JWT authentication in GraphQL context
+- Apollo Client setup with authentication link
+- Querying and mutating data with Apollo Client hooks
+- Real-time updates with GraphQL subscriptions over WebSockets
+- Apollo cache management and manual cache updates
+- Solving the n+1 problem
