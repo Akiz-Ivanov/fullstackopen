@@ -19,7 +19,7 @@ const genderIcon = (gender: Gender) => {
   }
 };
 
-const PatientView = () => {
+const PatientPage = () => {
   const id = useParams<{ id: string }>().id;
   const [patient, setPatient] = useState<Patient | null>(null);
 
@@ -34,6 +34,8 @@ const PatientView = () => {
 
   if (!patient) return <Typography>Loading...</Typography>;
 
+  const { entries } = patient;
+
   return (
     <Box mt={4}>
       <Card>
@@ -44,10 +46,28 @@ const PatientView = () => {
           <Typography>SSN: {patient.ssn}</Typography>
           <Typography>Occupation: {patient.occupation}</Typography>
           <Typography>Date of birth: {patient.dateOfBirth}</Typography>
+
+          <Typography variant="h5">entries</Typography>
+          {entries.map((entry) => (
+            <Card key={entry.id} variant="outlined" sx={{ mt: 2 }}>
+              <CardContent>
+                <Typography>
+                  {entry.date} {entry.description}
+                </Typography>
+                {entry.diagnosisCodes && (
+                  <ul>
+                    {entry.diagnosisCodes.map((code) => (
+                      <li key={code}>{code}</li>
+                    ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
+          ))}
         </CardContent>
       </Card>
     </Box>
   );
 };
 
-export default PatientView;
+export default PatientPage;
