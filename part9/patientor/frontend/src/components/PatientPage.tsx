@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import type { Patient } from "../types";
+import type { Diagnosis, Patient } from "../types";
 import { useEffect, useState } from "react";
 import patientService from "../services/patients";
 import { Box, Card, CardContent, Typography } from "@mui/material";
@@ -7,6 +7,11 @@ import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import { Gender } from "../types";
+import EntryDetails from "./EntryDetails";
+
+interface Props {
+  diagnoses: Diagnosis[];
+}
 
 const genderIcon = (gender: Gender) => {
   switch (gender) {
@@ -19,7 +24,7 @@ const genderIcon = (gender: Gender) => {
   }
 };
 
-const PatientPage = () => {
+const PatientPage = ({ diagnoses }: Props) => {
   const id = useParams<{ id: string }>().id;
   const [patient, setPatient] = useState<Patient | null>(null);
 
@@ -49,20 +54,7 @@ const PatientPage = () => {
 
           <Typography variant="h5">entries</Typography>
           {entries.map((entry) => (
-            <Card key={entry.id} variant="outlined" sx={{ mt: 2 }}>
-              <CardContent>
-                <Typography>
-                  {entry.date} {entry.description}
-                </Typography>
-                {entry.diagnosisCodes && (
-                  <ul>
-                    {entry.diagnosisCodes.map((code) => (
-                      <li key={code}>{code}</li>
-                    ))}
-                  </ul>
-                )}
-              </CardContent>
-            </Card>
+            <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
           ))}
         </CardContent>
       </Card>
