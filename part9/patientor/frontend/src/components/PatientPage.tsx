@@ -1,13 +1,15 @@
 import { useParams } from "react-router-dom";
-import type { Diagnosis, Patient } from "../types";
+import type { Diagnosis, EntryWithoutId, Patient } from "../types";
 import { useEffect, useState } from "react";
 import patientService from "../services/patients";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import { Gender } from "../types";
 import EntryDetails from "./EntryDetails";
+import axios from "axios";
+import EntryForm from "./EntryForm";
 
 interface Props {
   diagnoses: Diagnosis[];
@@ -28,6 +30,14 @@ const PatientPage = ({ diagnoses }: Props) => {
   const id = useParams<{ id: string }>().id;
   const [patient, setPatient] = useState<Patient | null>(null);
 
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
   useEffect(() => {
     if (!id) return;
     const fetchPatient = async () => {
@@ -36,6 +46,25 @@ const PatientPage = ({ diagnoses }: Props) => {
     };
     void fetchPatient();
   }, [id]);
+
+  const submitNewEntry = async (values: EntryWithoutId) => {
+    if (!id) return;
+    try {
+      await patientService.createNewEntry(id, values);
+      const updatedPatient = await patientService.getPatientById(id);
+      setPatient(updatedPatient);
+      setError(undefined);
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        const errorData = e.response?.data?.error;
+        if (Array.isArray(errorData)) {
+          setError(errorData[0]?.message ?? "Validation error");
+        } else {
+          setError(typeof errorData === "string" ? errorData : "Unknown error");
+        }
+      }
+    }
+  };
 
   if (!patient) return <Typography>Loading...</Typography>;
 
@@ -51,6 +80,19 @@ const PatientPage = ({ diagnoses }: Props) => {
           <Typography>SSN: {patient.ssn}</Typography>
           <Typography>Occupation: {patient.occupation}</Typography>
           <Typography>Date of birth: {patient.dateOfBirth}</Typography>
+
+          {!modalOpen ? (
+            <Button variant="contained" onClick={() => setModalOpen(true)}>
+              Add New Entry
+            </Button>
+          ) : (
+            <EntryForm
+              onSubmit={submitNewEntry}
+              onCancel={closeModal}
+              diagnoses={diagnoses}
+              error={error}
+            />
+          )}
 
           <Typography variant="h5">entries</Typography>
           {entries.map((entry) => (

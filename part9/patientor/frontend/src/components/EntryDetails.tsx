@@ -1,17 +1,12 @@
 import { Favorite, LocalHospital, Work } from "@mui/icons-material";
 import { Diagnosis, Entry } from "../types";
 import { Card, CardContent, Typography } from "@mui/material";
+import { assertNever } from "../utils";
 
 interface Props {
   entry: Entry;
   diagnoses: Diagnosis[];
 }
-
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`,
-  );
-};
 
 const EntryDetails = ({ entry, diagnoses }: Props) => {
   const typeSpecificDetails = () => {

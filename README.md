@@ -108,7 +108,7 @@ This part covers:
 
 ---
 
-## 🟦 Part 8 – GraphQL
+## 🔗 Part 8 – GraphQL
 
 This part introduces **GraphQL** as an alternative to REST for building APIs, covering both server and client-side implementation.
 
@@ -128,3 +128,28 @@ This part covers:
 - Real-time updates with GraphQL subscriptions over WebSockets
 - Apollo cache management and manual cache updates
 - Solving the n+1 problem
+
+---
+
+## 🔷 Part 9 – TypeScript
+
+This part introduces **TypeScript** as a superset of JavaScript, covering type safety across both backend and frontend development.
+
+**Exercises:**
+
+- [`ts-calculators`](./part9/ts-calculators) — _9.1 to 9.7 - TypeScript basics, type guards, and utility scripts_
+- [`ts-frontend`](./part9/ts-frontend) — _9.14 to 9.16 - Typed React components with discriminated unions_
+- [`flight-diary`](./part9/flight-diary) — _9.17 to 9.20 - Full stack flight diary app with typed Express backend and React frontend_
+- [`patientor`](./part9/patientor) — _9.21 to 9.30 - Full stack medical records app with advanced TypeScript patterns_
+
+This part covers:
+
+- TypeScript configuration, compilation, and ESLint integration
+- Type inference, type guards, and utility types (`Omit`, `Pick`, `Partial`)
+- Discriminated unions and exhaustive type checking with `assertNever`
+- Generics and indexed access types
+- Typing Express routes and request/response objects
+- Runtime validation with **Zod** including discriminated union schemas
+- Enums vs union types and when to use each
+- Typing React components, hooks, and event handlers
+- Sharing types between frontend and backend
