@@ -1,7 +1,7 @@
 import patients from "../../data/patients";
-import { NewPatientEntry, NonSsnPatient, Patient } from "../types";
+import { NewPatientEntry, NonSensitivePatient, Patient } from "../types";
 
-const getNonSsnPatients = (): NonSsnPatient[] => {
+const getNonSensitivePatient = (): NonSensitivePatient[] => {
   return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -14,6 +14,7 @@ const getNonSsnPatients = (): NonSsnPatient[] => {
 const addPatient = (entry: NewPatientEntry): Patient => {
   const newPatientEntry = {
     id: crypto.randomUUID(),
+    entries: [],
     ...entry,
   };
 
@@ -21,7 +22,13 @@ const addPatient = (entry: NewPatientEntry): Patient => {
   return newPatientEntry;
 };
 
+const findById = (id: string): Patient | undefined => {
+  const patient = patients.find((p) => p.id === id);
+  return patient;
+};
+
 export default {
-  getNonSsnPatients,
+  getNonSensitivePatient,
   addPatient,
+  findById,
 };

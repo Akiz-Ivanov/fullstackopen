@@ -2,14 +2,14 @@ import express from "express";
 import { Response } from "express";
 
 import patientService from "../services/patientService";
-import { NonSsnPatient } from "../types";
+import { NonSensitivePatient } from "../types";
 import { toNewPatientEntry } from "../utils";
 import z from "zod";
 
 const router = express.Router();
 
-router.get("/", (_req, res: Response<NonSsnPatient[]>) => {
-  res.send(patientService.getNonSsnPatients());
+router.get("/", (_req, res: Response<NonSensitivePatient[]>) => {
+  res.send(patientService.getNonSensitivePatient());
 });
 
 router.post("/", (req, res) => {
@@ -24,6 +24,16 @@ router.post("/", (req, res) => {
     } else {
       res.status(400).send({ error: "unknown error" });
     }
+  }
+});
+
+router.get("/:id", (req, res) => {
+  const patient = patientService.findById(req.params.id);
+
+  if (patient) {
+    res.send(patient);
+  } else {
+    res.sendStatus(404);
   }
 });
 
