@@ -4,7 +4,8 @@ import theme from '../theme';
 import Heading from './Heading';
 import * as yup from 'yup';
 import Text from './Text';
-
+import useSignIn from '../hooks/useSignIn';
+import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,9 +46,20 @@ const initialValues = {
 };
 
 const SignIn = () => {
+  const [signIn] = useSignIn();
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { authenticate } = await signIn({ username, password });
+      console.log('SIGN IN RESULT:', JSON.stringify(authenticate, null, 2));
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const formik = useFormik({
