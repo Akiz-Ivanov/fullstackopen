@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 
 const RepositoryItem = ({ item }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="repositoryItem">
 
       <RepositoryProfile
         ownerAvatarUrl={item.ownerAvatarUrl}
