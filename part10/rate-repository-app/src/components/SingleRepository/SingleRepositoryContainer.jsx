@@ -20,7 +20,7 @@ const SingleRepositoryContainer = ({ repository, onEndReach }) => {
       data={reviews}
       keyExtractor={(item) => item.id}
       onEndReached={onEndReach}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={0.1}
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={() => (
         <>
