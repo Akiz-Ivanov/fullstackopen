@@ -1,7 +1,6 @@
 
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import RepositoryItem from '../RepositoryItem';
-import { useNavigate } from 'react-router-native';
 import RepositoryListHeader from './RepositoryListHeader';
 import { useMemo } from 'react';
 
@@ -14,12 +13,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const RepositoryListContainer = ({ repositories, selectedOrder, setSelectedOrder, searchKeyword, setSearchKeyword }) => {
+const RepositoryListContainer = ({
+  repositories,
+  selectedOrder,
+  setSelectedOrder,
+  searchKeyword,
+  setSearchKeyword,
+  onRepositoryPress,
+  onEndReach,
+}) => {
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
     : [];
-
-  let navigate = useNavigate();
 
   const renderHeader = useMemo(() => (
     <RepositoryListHeader
@@ -35,10 +40,12 @@ const RepositoryListContainer = ({ repositories, selectedOrder, setSelectedOrder
       style={styles.container}
       data={repositoryNodes}
       keyExtractor={(item) => item.id}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={renderHeader}
       renderItem={({ item }) => (
-        <Pressable onPress={() => navigate(`/${item.id}`)}>
+        <Pressable onPress={() => onRepositoryPress(item.id)}>
           <RepositoryItem item={item} />
         </Pressable>
       )}

@@ -1,4 +1,4 @@
-import Heading from './Heading';
+import Heading from '../Heading';
 import { Link } from 'react-router-native';
 
 const AppBarTab = ({ title, to }) => {

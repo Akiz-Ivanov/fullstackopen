@@ -1,11 +1,11 @@
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Constants from 'expo-constants';
-import theme from '../theme';
+import theme from '../../theme';
 import AppBarTab from './AppBarTab';
-import useAuthStorage from '../hooks/useAuthStorage';
-import { useApolloClient, useQuery } from '@apollo/client';
-import { ME } from '../graphql/queries';
-import Heading from './Heading';
+import useAuthStorage from '../../hooks/useAuthStorage';
+import { useApolloClient } from '@apollo/client';
+import Heading from '../Heading';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
-  const { data } = useQuery(ME);
+  const { user } = useCurrentUser();
 
   const handleSignOut = async () => {
     await authStorage.removeAccessToken();
@@ -34,9 +34,10 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal contentContainerStyle={styles.contentContainer} >
         <AppBarTab title="Repositories" to="/" />
-        {data?.me ? (
+        {user ? (
           <>
             <AppBarTab title="Create a review" to="/create-review" />
+            <AppBarTab title="My reviews" to="/my-reviews" />
             <Pressable onPress={handleSignOut}>
               <Heading color="textWhite">Sign out</Heading>
             </Pressable>

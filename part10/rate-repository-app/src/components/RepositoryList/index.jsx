@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useRepositories from '../../hooks/useRepositories';
 import RepositoryListContainer from './RepositoryListContainer';
 import useDebounce from '../../hooks/useDebounce';
+import { useNavigate } from 'react-router-native';
 
 const ORDER_VARIABLES = {
   latest: {
@@ -24,12 +25,19 @@ const RepositoryList = () => {
 
   const debouncedSearchKeyword = useDebounce(searchKeyword, 500);
 
+  let navigate = useNavigate();
+
   const variables = {
     ...ORDER_VARIABLES[selectedOrder],
     searchKeyword: debouncedSearchKeyword,
+    first: 10,
   };
 
-  const { repositories } = useRepositories(variables);
+  const { repositories, fetchMore } = useRepositories(variables);
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
@@ -38,6 +46,8 @@ const RepositoryList = () => {
       setSelectedOrder={setSelectedOrder}
       searchKeyword={searchKeyword}
       setSearchKeyword={setSearchKeyword}
+      onRepositoryPress={(id) => navigate(`/${id}`)}
+      onEndReach={onEndReach}
     />
   );
 };

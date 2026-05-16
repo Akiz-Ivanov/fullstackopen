@@ -1,14 +1,17 @@
 import { gql } from "@apollo/client";
-import { REPOSITORY_FIELDS } from "./fragments";
+import { REPOSITORY_FIELDS, REVIEW_FIELDS } from "./fragments";
 
 export const GET_REPOSITORIES = gql`
   query Repositories(
     $orderBy: AllRepositoriesOrderBy
     $orderDirection: OrderDirection
     $searchKeyword: String
+    $first: Int
+    $after: String
   ) {
     repositories(
-      first: 10
+      first: $first
+      after: $after
       orderBy: $orderBy
       orderDirection: $orderDirection
       searchKeyword: $searchKeyword
@@ -17,6 +20,12 @@ export const GET_REPOSITORIES = gql`
         node {
           ...RepositoryFields
         }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
       }
     }
   }
@@ -24,30 +33,20 @@ export const GET_REPOSITORIES = gql`
   ${REPOSITORY_FIELDS}
 `;
 
-export const ME = gql`
-  query Me($includeReviews: Boolean = false) {
+export const GET_CURRENT_USER = gql`
+  query CurrentUser($includeReviews: Boolean = false) {
     me {
       id
       username
-    }
-  }
-`;
 
-export const GET_ONE_REPOSITORY = gql`
-  query Repository($id: ID!) {
-    repository(id: $id) {
-      ...RepositoryFields
-
-      reviews {
+      reviews @include(if: $includeReviews) {
         edges {
           node {
-            id
-            text
-            rating
-            createdAt
-            user {
+            ...ReviewFields
+
+            repository {
               id
-              username
+              fullName
             }
           }
         }
@@ -55,5 +54,31 @@ export const GET_ONE_REPOSITORY = gql`
     }
   }
 
+  ${REVIEW_FIELDS}
+`;
+
+export const GET_ONE_REPOSITORY = gql`
+  query Repository($id: ID!, $first: Int, $after: String) {
+    repository(id: $id) {
+      ...RepositoryFields
+
+      reviews(first: $first, after: $after) {
+        edges {
+          node {
+            ...ReviewFields
+          }
+          cursor
+        }
+
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+
   ${REPOSITORY_FIELDS}
+  ${REVIEW_FIELDS}
 `;

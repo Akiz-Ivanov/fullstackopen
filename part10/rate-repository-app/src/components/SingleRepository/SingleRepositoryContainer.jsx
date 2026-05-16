@@ -12,13 +12,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const SingleRepositoryContainer = ({ repository }) => {
+const SingleRepositoryContainer = ({ repository, onEndReach }) => {
   const reviews = repository.reviews.edges.map(edge => edge.node);
 
   return (
     <FlatList
       data={reviews}
       keyExtractor={(item) => item.id}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={() => (
         <>
