@@ -153,3 +153,25 @@ This part covers:
 - Enums vs union types and when to use each
 - Typing React components, hooks, and event handlers
 - Sharing types between frontend and backend
+
+## 📱 Part 10 – React Native
+
+This part introduces **React Native** and **Expo** for building cross-platform mobile applications, covering everything from basic components to GraphQL integration and testing.
+
+**Exercises:**
+
+- [`rate-repository-app`](./part10/rate-repository-app) — _10.1 to 10.27_
+
+This part covers:
+
+- Setting up a React Native project with **Expo**
+- Core React Native components and styling with StyleSheet
+- Navigation with **React Router Native**
+- Connecting to a GraphQL API with **Apollo Client**
+- Authentication with **AsyncStorage** and JWT tokens
+- Forms and validation with **Formik** and **Yup**
+- Cursor-based pagination and infinite scrolling with `relayStylePagination`
+- Repository sorting and filtering with debounced search
+- User reviews — creating, viewing, and deleting with confirmation alerts
+- Testing React Native components with **Jest** and **React Native Testing Library**
+- GraphQL `@include` directive for conditional field fetching
